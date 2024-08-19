@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Números Secretos</title>
+
+    <!-- Metadata -->
+    <meta name="description" content="Adivina el número secreto de 4 dígitos en este divertido juego de lógica y deducción. ¡Intenta adivinar en la menor cantidad de intentos posible!">
+    <meta property="og:title" content="Números Secretos">
+    <meta property="og:description" content="Adivina el número secreto de 4 dígitos en este divertido juego de lógica y deducción. ¡Intenta adivinar en la menor cantidad de intentos posible!">
+    <meta property="og:image" content="/preview.webp">
+    <meta property="og:url" content="https://numerossecretos.netlify.app">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Números Secretos">
+    <meta name="twitter:description" content="Adivina el número secreto de 4 dígitos en este divertido juego de lógica y deducción. ¡Intenta adivinar en la menor cantidad de intentos posible!">
+    <meta name="twitter:image" content="/preview.webp">
+    <meta name="twitter:site" content="https://numerossecretos.netlify.app">
+
+    <!-- Favicon e iconos -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Fuentes y estilos -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-white: #FFF;
+            --color-black: #000;
+            --color-bg: #1E1E1E;
+            --color-primary: #FF0054;
+            --color-secondary: #00D1FF;
+            --color-accent: #FFD500;
+            --shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            --font-pacifico: 'Pacifico', cursive;
+        }
+
+        body {
+            background: var(--color-bg);
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            background: var(--color-white);
+            height: 100vh;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-pacifico);
+            font-size: 3rem;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        b {
+            font-size: 1.5rem;
+            font-family: var(--font-pacifico);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin: 1rem 0;
+        }
+
+        .input-container input {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            text-align: center;
+            width: 4rem;
+            height: calc(4rem - 12px);
+            font-size: 4rem;
+            border-radius: 10px;
+            padding-bottom: 12px;
+            border: 4px solid transparent;
+            font-weight: bolder;
+            font-family: var(--font-pacifico);
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0 10px;
+            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: scroll;
+            height: calc(100% - 115px - 2rem - 52px);
+            width: 100%;
+        }
+
+        .instructions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 2rem;
+            cursor: pointer;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        article h1 {
+            font-size: 2rem;
+        }
+
+        article {
+            background: var(--color-white);
+            color: var(--color-black);
+            box-shadow: var(--shadow);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .eye {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(rgb(255, 123, 0) 20%, rgb(255, 225, 0) 80%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .pupil {
+            width: 30px;
+            height: 30px;
+            background-color: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .sparkle {
+            width: 15px;
+            height: 15px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(30%, -100%);
+        }
+
+        .eyes-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cat-head {
+            position: relative;
+            width: 150px;
+            height: 140px;
+            background: #000;
+            border-radius: 100%;
+            margin-top: 2rem;
+            display: flex;
+            z-index: 9;
+        }
+
+        .cat-ear {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 30px 50px 30px;
+            border-color: transparent transparent #000 transparent;
+            top: -10px;
+            scale: 1.5;
+        }
+
+        .cat-ear.left {
+            left: 0;
+            transform: rotate(-20deg);
+        }
+
+        .cat-ear.right {
+            right: 0;
+            transform: rotate(20deg);
+        }
+
+        .winning {
+            position: absolute;
+            display: flex;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255);
+        }
+
+        button {
+            cursor: pointer;
+            margin: 1rem;
+            padding: 1rem;
+            font-family: 'Nunito';
+            border-radius: 10px;
+            background: var(--color-white);
+            font-weight: bolder;
+        }
+
+        .very-big {
+            font-size: 5em;
+        }
+
+        .very-big p {
+            margin-top: 1rem;
+            font-family: var(--font-pacifico);
+        }
+
+        .instructions-text {
+            position: absolute;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            top: 0;
+            bottom: 0;
+            padding: 1rem;
+            cursor: auto;
+        }
+
+        .instructions-text p {
+            margin-top: 1rem;
+        }
+
+        @media screen and (max-width: 400px) {
+            body {
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden; 
+            }
+
+            main {
+                width: 100%;
+                box-sizing: border-box; 
+            }
+
+            .instructions-text {
+                width: 100%;
+                box-sizing: border-box; 
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <main>
+        <div class="cat-head">
+            <div class="cat-ear left"></div>
+            <div class="cat-ear right"></div>
+            <div class="eyes-container">
+                <div class="eye">
+                    <div class="pupil">
+                        <div class="sparkle"></div>
+                    </div>
+                </div>
+                <div class="eye">
+                    <div class="pupil">
+                        <div class="sparkle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-container">
+            <input id="input-0" type="number" maxlength="1" max="9" min="1" autofocus>
+            <input id="input-1" type="number" maxlength="1" max="9" min="0">
+            <input id="input-2" type="number" maxlength="1" max="9" min="0">
+            <input id="input-3" type="number" maxlength="1" max="9" min="0">
+        </div>
+        <ul id="list-numbers"></ul>
+        <div class="instructions"><p id="how-to-play">¿Cómo jugar?</p></div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script>
+        const $inputContainer = document.querySelector('.input-container');
+        const $listNumbers = document.getElementById("list-numbers");
+        const $instructions = document.querySelector('.instructions');
+
+        var SECRET = createNumber();
+        var digits = ['','','',''];
+        var firstDigitIsZero;
+        var tryes = 0;
+
+        function addMockArticles(){
+            document.addEventListener('DOMContentLoaded', function(){
+                for (let i = 0; i < 10; i++) {
+                printArticle(SECRET.join(''), 1, 1)
+                }
+            })
+        }
+
+        function createNumber(){
+            let targetNumber = []
+            
+            for (let i = 0; i < 4; i++) {
+                let digit = Math.floor(Math.random() * 10);
+
+                while ( (i === 0) && (digit === 0)) {
+                    digit = Math.floor(Math.random() * 10);
+                }
+
+                while (targetNumber.includes(digit)){
+                    digit = Math.floor(Math.random() * 10);
+                } 
+                
+                targetNumber.push(digit)
+            }
+
+            return targetNumber.map(n => n.toString())
+        }
+
+        function clearInputsAndDigits(){
+            $inputContainer.querySelectorAll('input').forEach(i => i.value = '');
+            digits = ['','','',''];
+            document.getElementById('input-0').focus();
+        }
+
+        function printArticle(number, correctDigits, rightPositions){
+            tryes++
+
+            $listNumbers.innerHTML = 
+                `<li>
+                    <article>
+                        <h1>${number}</h1> 
+                            <p>${correctDigits} Aciertos | ${rightPositions} Posiciones correctas</p>
+                    </article>
+                </li>`  + $listNumbers.innerHTML;
+        }
+
+        function printWin(number){
+            tryes++
+            $listNumbers.innerHTML = 
+            `<li class="winning">
+                <h1 class="very-big">${number}</h1> 
+                <h1>¡Has ganado!</h1>
+                <p>${tryes} números de intentos<p/>
+                <button>Volver a jugar</button>
+            </li>
+            `;
+
+            $inputContainer.querySelectorAll('input').forEach(i => i.setAttribute('disabled', true))
+            document.querySelector('button').addEventListener('click', replay)
+        }
+
+        function replay(){
+            $inputContainer.querySelectorAll('input').forEach(i => i.removeAttribute('disabled'))
+            clearInputsAndDigits();
+            $listNumbers.innerHTML = '';
+            SECRET = createNumber();
+            tryes = 0;
+        }
+
+        function checkWin(){
+            if (SECRET.join('') === digits.join('')){
+                printWin(digits.join(''));
+                confetti(5);
+            } else {
+                if (digits.length === 4 && !digits.includes('')){
+                    let number = digits.join('');
+                    let rightPositions = 0;
+                    let correctDigits = 0;
+                    
+
+                    for (let i = 0; i < digits.length; i++) {
+                        const digitIndex = digits[i];
+                        const secretIndex= SECRET[i];
+                        
+                        if (SECRET.includes(digitIndex)){
+                            ++correctDigits
+                        }
+
+                        if (digitIndex === secretIndex) {
+                            ++rightPositions
+                        }
+                    }
+
+                    
+
+                    printArticle(number, correctDigits, rightPositions)
+                    clearInputsAndDigits();
+                }
+            }
+        }
+
+        $inputContainer.addEventListener('keyup', function (event) {
+            const TARGET = event.srcElement;
+            const MAX_LENGTH = 1;
+            const MY_LENGTH = TARGET.value.length;
+
+            const $currentInput = document.getElementById(TARGET.id); 
+            const currentInputIndex = parseInt($currentInput.id.split('-')[1]);
+            let currentInputValue = $currentInput.value;
+
+            firstDigitIsZero = currentInputIndex === 0 && currentInputValue === '0';
+
+            if (currentInputValue.length > 1) {
+                currentInputValue = currentInputValue.slice(0, 1);
+                TARGET.value = currentInputValue;
+            }
+
+            if(firstDigitIsZero){
+                // agregar la shit que te explica porque se borra el número
+                $currentInput.value = ''
+            } else if(digits.includes(currentInputValue) && currentInputValue !== ''){
+                const indexCollision = digits.findIndex(digit => digit === currentInputValue);
+                if (indexCollision !== currentInputIndex){
+                    const $inputCollision = document.getElementById(`input-${indexCollision}`);
+                    digits[indexCollision] = '';
+                    $inputCollision.value = '';
+                    // agregar la shit que te explica porque se borra el número
+                }
+            } 
+                
+            if(!firstDigitIsZero){
+                digits[currentInputIndex] = currentInputValue;
+
+                if (MY_LENGTH >= MAX_LENGTH) {
+                    let next = TARGET;
+                    while (next = next.nextElementSibling) {
+                        if (next == null) break;
+                        if (next.tagName.toLowerCase() === "input") {
+                            next.focus();
+                            break;
+                        }
+                    }
+                }
+
+                if (MY_LENGTH === 0) {
+                    let next = TARGET;
+                    while (next = next.previousElementSibling) {
+                        if (next == null) break;
+                        if (next.tagName.toLowerCase() === "input") {
+                            next.focus();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            checkWin();
+        });
+
+        $inputContainer.addEventListener('keydown', function (event) {
+            const TARGET = event.srcElement;
+
+            if(event.key === '0' && TARGET.id === 'input-0'){
+                event.preventDefault()
+            }
+
+            if (!/\d/.test(event.key) || event.key !== TARGET.value) {
+                TARGET.value = '';
+            } 
+        });
+
+        document.addEventListener('focusin', function(event) {
+            const target = +event.target.id.split('-')[1];
+            const eyes = document.querySelectorAll('.eye');
+            
+            eyes.forEach(eye => {
+                const pupil = eye.querySelector('.pupil');
+
+                pupil.style.transform = `translate(-70%, -25%)`;
+                pupil.style.transform = `translate(-60%, -25%)`;
+                pupil.style.transform = `translate(-50%, -25%)`;
+                pupil.style.transform = `translate(-40%, -25%)`;
+
+                pupil.style.transform = `translate(-${70 - (target * 10)}%, -25%)`;
+                pupil.style.transition = 'all ease .3s'
+            });
+        });
+
+        document.addEventListener('focusout', function() {
+            const eyes = document.querySelectorAll('.eye');
+            
+            eyes.forEach(eye => {
+                const pupil = eye.querySelector('.pupil');
+
+                pupil.style.transform = `translate(-50%, -50%)`;
+                pupil.style.transition = 'all ease .3s'
+            });
+        });
+    
+        $instructions.addEventListener('click', function(event) {
+            const TARGET = event.target.name; 
+
+            if(event.target.id === 'how-to-play'){
+                if (!$instructions.querySelector('.instructions-text')) { 
+                    $instructions.innerHTML = `
+                        <div class='instructions-text'>
+                            <h1>¿Cómo jugar?</h1>
+                            <p>Adivina el número secreto de 4 dígitos. Ingresa un dígito en cada campo, asegurándote de que no se repitan y que el primer dígito no sea cero. Después de cada intento, verás cuántos dígitos son correctos y cuántos están en la posición correcta. ¡Intenta adivinar el número en la menor cantidad de intentos posible!</p>
+                            <button name='go-back'>Volver</button>
+                        </div>
+                    `;
+                }
+            }
+
+            if(event.target.name === 'go-back'){
+                    $instructions.innerHTML = '<div class="instructions"><p id="how-to-play">¿Cómo jugar?</p></div>'
+            }
+        });
+
+        // addMockArticles()
+
+    </script>
+</body>
+</html>
