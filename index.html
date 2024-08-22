@@ -142,6 +142,7 @@
             margin-top: 1rem;
             font-family: sans-serif;
             opacity: 0.5;
+            animation: appear .3s ease-in-out;
         }
         
         #how-to-play:hover{
@@ -165,6 +166,7 @@
             box-shadow: var(--shadow);
             border: 1rem;
             padding: 1rem;
+            animation: appear .3s ease-in-out;
         }
 
         .instructions-text p {
@@ -315,6 +317,19 @@
             }
         }
 
+        @keyframes appear{
+            0%{
+                scale: 0;
+            }
+            100%{
+                scale: 1;
+            }
+        }
+
+        .last-added{
+            animation: appear .3s ease-in-out;
+        }
+
     </style>
 </head>
 <body>
@@ -392,8 +407,12 @@
         function printArticle(number, correctDigits, rightPositions){
             tryes++
 
+            if($listNumbers.firstChild){
+                $listNumbers.firstChild.removeAttribute("class");
+            }
+
             $listNumbers.innerHTML = 
-                `<li>
+                `<li class="last-added">
                     <article>
                         <h1>${number}</h1> 
                             <p>${correctDigits} Aciertos | ${rightPositions} Posiciones correctas</p>
@@ -454,6 +473,56 @@
                     clearInputsAndDigits();
                 }
             }
+        }
+
+        function moveCatEyes(){
+            document.addEventListener('focusin', function(event) {
+                if (event.target.type != 'number'){
+                    return
+                }
+
+                const target = +event.target.id.split('-')[1];
+                const eyes = document.querySelectorAll('.eye');
+                
+                eyes.forEach(eye => {
+                    const pupil = eye.querySelector('.pupil');
+
+                    pupil.style.transform = `translate(-${70 - (target * 10)}%, -25%)`;
+                    pupil.style.transition = 'all ease .3s'
+                });
+            });
+
+            document.addEventListener('focusout', function() {
+                const eyes = document.querySelectorAll('.eye');
+                
+                eyes.forEach(eye => {
+                    const pupil = eye.querySelector('.pupil');
+
+                    pupil.style.transform = `translate(-50%, -50%)`;
+                    pupil.style.transition = 'all ease .3s'
+                });
+            });
+        }
+
+        function howToPlayHandle(){
+            $instructions.addEventListener('click', function(event) {
+
+            if(event.target.id === 'how-to-play'){
+                if (!$instructions.querySelector('.instructions-text')) { 
+                    $instructions.innerHTML = `
+                        <div class='instructions-text'>
+                            <h1>¿Cómo jugar?</h1>
+                            <p>Adivina el número secreto de 4 dígitos. Ingresa un dígito en cada campo, asegurándote de que no se repitan y que el primer dígito no sea cero. Después de cada intento, verás cuántos dígitos son correctos y cuántos están en la posición correcta. ¡Intenta adivinar el número en la menor cantidad de intentos posible!</p>
+                            <button name='go-back'>Volver</button>
+                        </div>
+                    `;
+                }
+            }
+
+                if(event.target.name === 'go-back'){
+                        $instructions.innerHTML = '<p id="how-to-play">?</p>'
+                }
+            });
         }
 
         $inputContainer.addEventListener('keyup', function (event) {
@@ -526,56 +595,11 @@
             } 
         });
 
-        document.addEventListener('focusin', function(event) {
-            const target = +event.target.id.split('-')[1];
-            const eyes = document.querySelectorAll('.eye');
-            
-            eyes.forEach(eye => {
-                const pupil = eye.querySelector('.pupil');
-
-                pupil.style.transform = `translate(-70%, -25%)`;
-                pupil.style.transform = `translate(-60%, -25%)`;
-                pupil.style.transform = `translate(-50%, -25%)`;
-                pupil.style.transform = `translate(-40%, -25%)`;
-
-                pupil.style.transform = `translate(-${70 - (target * 10)}%, -25%)`;
-                pupil.style.transition = 'all ease .3s'
-            });
-        });
-
-        document.addEventListener('focusout', function() {
-            const eyes = document.querySelectorAll('.eye');
-            
-            eyes.forEach(eye => {
-                const pupil = eye.querySelector('.pupil');
-
-                pupil.style.transform = `translate(-50%, -50%)`;
-                pupil.style.transition = 'all ease .3s'
-            });
-        });
-    
-        $instructions.addEventListener('click', function(event) {
-            const TARGET = event.target.name; 
-
-            if(event.target.id === 'how-to-play'){
-                if (!$instructions.querySelector('.instructions-text')) { 
-                    $instructions.innerHTML = `
-                        <div class='instructions-text'>
-                            <h1>¿Cómo jugar?</h1>
-                            <p>Adivina el número secreto de 4 dígitos. Ingresa un dígito en cada campo, asegurándote de que no se repitan y que el primer dígito no sea cero. Después de cada intento, verás cuántos dígitos son correctos y cuántos están en la posición correcta. ¡Intenta adivinar el número en la menor cantidad de intentos posible!</p>
-                            <button name='go-back'>Volver</button>
-                        </div>
-                    `;
-                }
-            }
-
-            if(event.target.name === 'go-back'){
-                    $instructions.innerHTML = '<p id="how-to-play">?</p>'
-            }
-        });
 
         // addMockArticles()
 
+        moveCatEyes();
+        howToPlayHandle();
     </script>
 </body>
 </html>
