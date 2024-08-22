@@ -58,6 +58,7 @@
         }
 
         main {
+            position: relative;
             background: var(--color-white);
             height: 100vh;
             padding: 0 2rem;
@@ -121,16 +122,53 @@
             flex-direction: column;
             gap: 10px;
             overflow-y: scroll;
-            height: calc(100% - 115px - 2rem - 52px);
+            height: calc(100% - 115px - 52px);
             width: 100%;
         }
 
         .instructions {
+            position: absolute;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 2rem;
+            right: 1rem;
             cursor: pointer;
+        }
+
+        #how-to-play{
+            font-size: 2rem;
+            font-weight: bolder;
+            margin-top: 1rem;
+            font-family: sans-serif;
+            opacity: 0.5;
+        }
+        
+        #how-to-play:hover{
+            opacity: 1;
+        }
+
+        .instructions-text {
+            background: white;
+            display: flex;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            margin: auto;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 350px;
+            margin-top: 150px;
+            cursor: auto;
+            box-shadow: var(--shadow);
+            border: 1rem;
+            padding: 1rem;
+        }
+
+        .instructions-text p {
+            margin-top: 1rem;
         }
 
         ::-webkit-scrollbar {
@@ -259,24 +297,6 @@
             font-family: var(--font-pacifico);
         }
 
-        .instructions-text {
-            position: absolute;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 400px;
-            top: 0;
-            bottom: 0;
-            padding: 1rem;
-            cursor: auto;
-        }
-
-        .instructions-text p {
-            margin-top: 1rem;
-        }
-
         @media screen and (max-width: 400px) {
             body {
                 margin: 0;
@@ -290,7 +310,7 @@
             }
 
             .instructions-text {
-                width: 100%;
+                width: 90%;
                 box-sizing: border-box; 
             }
         }
@@ -322,7 +342,7 @@
             <input id="input-3" type="number" maxlength="1" max="9" min="0">
         </div>
         <ul id="list-numbers"></ul>
-        <div class="instructions"><p id="how-to-play">¿Cómo jugar?</p></div>
+        <div class="instructions"><p id="how-to-play">?</p></div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script>
@@ -550,7 +570,7 @@
             }
 
             if(event.target.name === 'go-back'){
-                    $instructions.innerHTML = '<div class="instructions"><p id="how-to-play">¿Cómo jugar?</p></div>'
+                    $instructions.innerHTML = '<p id="how-to-play">?</p>'
             }
         });
 
